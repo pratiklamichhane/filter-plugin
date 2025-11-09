@@ -1,0 +1,253 @@
+/**
+ * Admin CSS
+ * File: assets/css/admin.css
+ */
+
+/* Settings Wrapper */
+.apf-settings-wrap {
+    margin: 20px 20px 0 0;
+}
+
+.apf-settings-wrap h1 {
+    margin-bottom: 20px;
+}
+
+/* Filters Manager */
+.apf-filters-manager {
+    background: #fff;
+    padding: 20px;
+    border: 1px solid #ccd0d4;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+}
+
+.apf-filters-list {
+    margin: 20px 0;
+}
+
+/* Filter Item */
+.apf-filter-item {
+    background: #fff;
+    border: 1px solid #ddd;
+    margin-bottom: 15px;
+    border-radius: 4px;
+    transition: box-shadow 0.2s;
+}
+
+.apf-filter-item:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.apf-filter-item.ui-sortable-helper {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.apf-filter-item-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    background: #f9f9f9;
+    border-bottom: 1px solid #ddd;
+}
+
+.apf-drag-handle {
+    cursor: move;
+    color: #999;
+    font-size: 18px;
+    user-select: none;
+}
+
+.apf-drag-handle:hover {
+    color: #555;
+}
+
+.apf-filter-item-title {
+    flex: 1;
+    font-weight: 600;
+    color: #333;
+}
+
+.apf-filter-item-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.apf-enabled-toggle {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin: 0;
+    font-weight: normal;
+}
+
+.apf-filter-item-body {
+    padding: 20px;
+}
+
+/* Form Fields */
+.apf-filter-item-body .form-table th {
+    width: 200px;
+    padding: 15px 10px 15px 0;
+    font-weight: 600;
+}
+
+.apf-filter-item-body .form-table td {
+    padding: 15px 10px;
+}
+
+/* Price Range Rows */
+.apf-price-ranges,
+.apf-quick-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.apf-price-range-row,
+.apf-quick-option-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    background: #f9f9f9;
+    border-radius: 4px;
+}
+
+.apf-price-range-row input[type="number"] {
+    width: 80px;
+}
+
+.apf-price-range-row input[type="text"],
+.apf-quick-option-row input[type="text"] {
+    flex: 1;
+}
+
+.apf-remove-range,
+.apf-remove-option {
+    color: #dc3232;
+    border-color: #dc3232;
+    font-size: 20px;
+    line-height: 1;
+    padding: 5px 10px;
+    min-height: auto;
+}
+
+.apf-remove-range:hover,
+.apf-remove-option:hover {
+    background: #dc3232;
+    color: #fff;
+}
+
+/* Color Picker */
+.wp-picker-container {
+    display: inline-block;
+}
+
+/* Add Filter Button */
+#apf-add-filter {
+    margin-top: 10px;
+}
+
+/* Tabs */
+.nav-tab-wrapper {
+    margin-bottom: 20px;
+}
+
+/* Settings Table */
+.form-table th {
+    width: 250px;
+}
+
+.form-table .description {
+    margin-top: 8px;
+    font-size: 13px;
+    color: #666;
+}
+
+/* Custom CSS Textarea */
+.form-table textarea.code {
+    font-family: Consolas, Monaco, monospace;
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+/* Color Picker Fields */
+.apf-color-picker {
+    max-width: 100px;
+}
+
+/* Responsive */
+@media screen and (max-width: 782px) {
+    .apf-filter-item-header {
+        flex-wrap: wrap;
+    }
+    
+    .apf-filter-item-actions {
+        width: 100%;
+        justify-content: flex-end;
+    }
+    
+    .apf-price-range-row,
+    .apf-quick-option-row {
+        flex-wrap: wrap;
+    }
+    
+    .apf-price-range-row input,
+    .apf-quick-option-row input {
+        flex: 1 1 100%;
+        min-width: 0;
+    }
+}
+
+/* Success/Error Messages */
+.apf-settings-wrap .notice {
+    margin: 15px 0;
+}
+
+/* Help Text */
+.apf-help-text {
+    background: #f0f6fc;
+    border-left: 4px solid #0073aa;
+    padding: 12px;
+    margin: 15px 0;
+}
+
+.apf-help-text p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* Empty State */
+.apf-empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: #666;
+}
+
+.apf-empty-state svg {
+    width: 64px;
+    height: 64px;
+    margin-bottom: 20px;
+    opacity: 0.5;
+}
+
+/* Loading State */
+.apf-loading-state {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #0073aa;
+    border-radius: 50%;
+    animation: apf-admin-spin 1s linear infinite;
+    vertical-align: middle;
+    margin-left: 10px;
+}
+
+@keyframes apf-admin-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

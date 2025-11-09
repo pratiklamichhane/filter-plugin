@@ -1,0 +1,403 @@
+/**
+ * Frontend CSS
+ * File: assets/css/frontend.css
+ */
+
+/* Filter Container */
+.apf-filter-container {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 20px;
+    position: relative;
+}
+
+.apf-filter-container.hidden {
+    display: none;
+}
+
+/* Filter Header */
+.apf-filter-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.apf-hide-filters {
+    background: none;
+    border: none;
+    color: #374151;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0;
+    transition: color 0.2s;
+}
+
+.apf-hide-filters:hover {
+    color: #000;
+}
+
+.apf-result-count {
+    font-size: 14px;
+    color: #6b7280;
+}
+
+#apf-product-count {
+    font-weight: 600;
+    color: #000;
+}
+
+/* Filter Info */
+.apf-filter-info {
+    margin-bottom: 20px;
+    padding: 15px;
+    background: #f9fafb;
+    border-radius: 6px;
+}
+
+.apf-filter-info p {
+    margin: 0 0 10px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #4b5563;
+}
+
+.apf-quiz-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    color: #2563eb;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.apf-quiz-link:hover {
+    color: #1d4ed8;
+}
+
+/* Active Filters */
+.apf-active-filters {
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.apf-active-filters-inner {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.apf-filter-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: #f3f4f6;
+    border-radius: 20px;
+    font-size: 13px;
+    color: #374151;
+}
+
+.apf-remove-filter {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    color: #6b7280;
+    transition: color 0.2s;
+}
+
+.apf-remove-filter:hover {
+    color: #000;
+}
+
+.apf-clear-all {
+    background: none;
+    border: none;
+    color: #ef4444;
+    font-size: 13px;
+    cursor: pointer;
+    padding: 6px 12px;
+    font-weight: 500;
+}
+
+.apf-clear-all:hover {
+    text-decoration: underline;
+}
+
+/* Filter Groups */
+.apf-filter-groups {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.apf-filter-group {
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.apf-filter-group:last-child {
+    border-bottom: none;
+}
+
+.apf-filter-title {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 0;
+    background: none;
+    border: none;
+    font-size: 15px;
+    font-weight: 500;
+    color: #111827;
+    cursor: pointer;
+    text-align: left;
+    transition: color 0.2s;
+}
+
+.apf-filter-title:hover {
+    color: #000;
+}
+
+.apf-filter-title.active .apf-chevron {
+    transform: rotate(180deg);
+}
+
+.apf-chevron {
+    transition: transform 0.3s ease;
+}
+
+.apf-filter-content {
+    padding-bottom: 16px;
+}
+
+/* Filter Options */
+.apf-filter-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.apf-filter-option:hover {
+    color: #000;
+}
+
+.apf-filter-option input[type="checkbox"],
+.apf-filter-option input[type="radio"] {
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    cursor: pointer;
+}
+
+.apf-filter-option span {
+    flex: 1;
+    font-size: 14px;
+    color: #374151;
+}
+
+.apf-count {
+    color: #9ca3af;
+    font-size: 13px;
+}
+
+/* Color Swatches */
+.apf-color-swatches {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.apf-color-swatch {
+    cursor: pointer;
+    position: relative;
+}
+
+.apf-color-swatch input {
+    position: absolute;
+    opacity: 0;
+}
+
+.apf-color-circle {
+    display: block;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    transition: all 0.2s;
+}
+
+.apf-color-swatch:hover .apf-color-circle,
+.apf-color-swatch input:checked + .apf-color-circle {
+    border-color: #000;
+    box-shadow: 0 0 0 2px #fff, 0 0 0 4px #000;
+}
+
+/* Image Swatches */
+.apf-image-swatches {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.apf-image-swatch {
+    cursor: pointer;
+    position: relative;
+}
+
+.apf-image-swatch input {
+    position: absolute;
+    opacity: 0;
+}
+
+.apf-image-swatch img,
+.apf-no-image {
+    display: block;
+    width: 48px;
+    height: 48px;
+    border-radius: 6px;
+    border: 2px solid #e5e7eb;
+    transition: all 0.2s;
+    object-fit: cover;
+}
+
+.apf-no-image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f3f4f6;
+    color: #9ca3af;
+    font-weight: 600;
+}
+
+.apf-image-swatch:hover img,
+.apf-image-swatch:hover .apf-no-image,
+.apf-image-swatch input:checked + img,
+.apf-image-swatch input:checked + .apf-no-image {
+    border-color: #000;
+}
+
+/* Dropdown Filter */
+.apf-dropdown-filter {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 14px;
+    color: #374151;
+    background: #fff;
+    cursor: pointer;
+}
+
+.apf-dropdown-filter:focus {
+    outline: none;
+    border-color: #000;
+}
+
+/* Rating Filter */
+.apf-rating-option {
+    align-items: center;
+}
+
+.apf-stars {
+    display: inline-flex;
+    gap: 2px;
+    color: #d1d5db;
+    font-size: 16px;
+}
+
+.apf-stars .filled {
+    color: #fbbf24;
+}
+
+/* Loading Overlay */
+.apf-loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.9);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    z-index: 100;
+}
+
+.apf-loading-overlay.active {
+    display: flex;
+}
+
+.apf-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid #f3f4f6;
+    border-top-color: #000;
+    border-radius: 50%;
+    animation: apf-spin 0.6s linear infinite;
+}
+
+@keyframes apf-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .apf-filter-container {
+        padding: 15px;
+    }
+    
+    .apf-filter-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .apf-color-circle {
+        width: 32px;
+        height: 32px;
+    }
+    
+    .apf-image-swatch img,
+    .apf-no-image {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+/* Animation Classes */
+.apf-fade-enter {
+    opacity: 0;
+}
+
+.apf-fade-enter-active {
+    opacity: 1;
+    transition: opacity 300ms;
+}
+
+.apf-fade-exit {
+    opacity: 1;
+}
+
+.apf-fade-exit-active {
+    opacity: 0;
+    transition: opacity 300ms;
+}
