@@ -107,43 +107,43 @@ class APF_Filter_Widget extends WP_Widget {
                 <h3 class="apf-filter-main-title"><?php _e('Filters', 'ajax-product-filter'); ?></h3>
             </div>
             
-            <?php 
-            // Show info section with enhanced default text
-            $show_info = isset($instance['show_info']) ? $instance['show_info'] : true;
-            
-            // Get product count for dynamic message
-            global $wp_query;
-            $product_count = $wp_query->found_posts ?? 0;
-            
-            // Enhanced default text with more details
-            if (!isset($instance['info_text']) || empty($instance['info_text'])) {
-                $info_text = sprintf(
-                    __('Showing %s products. Use filters below to refine your search. Multiple selections work together to help you find exactly what you\'re looking for.', 'ajax-product-filter'),
-                    number_format_i18n($product_count)
-                );
-            } else {
-                $info_text = $instance['info_text'];
-            }
-            
-            if ($show_info):
-            ?>
-            <div class="apf-filter-info">
-                <p><?php echo esc_html($info_text); ?></p>
-                <?php if ($instance['show_quiz_link'] ?? false): ?>
-                <a href="<?php echo esc_url($instance['quiz_url'] ?? '#'); ?>" class="apf-quiz-link">
-                    <?php echo esc_html($instance['quiz_text'] ?? __('Need help? Take our style quiz', 'ajax-product-filter')); ?>
-                </a>
-                <?php endif; ?>
-            </div>
-            <?php endif; ?>
-            
             <!-- Dynamic Filter Groups from Database -->
             <div class="apf-filter-groups">
-                <?php foreach ($filters as $filter): ?>
-                    <?php if ($filter['enabled']): ?>
-                        <?php $this->render_filter_group($filter, $settings); ?>
-                    <?php endif; ?>
-                <?php endforeach; ?>
+                <?php 
+                $filter_count = 0;
+                foreach ($filters as $filter): 
+                    if ($filter['enabled']): 
+                        $this->render_filter_group($filter, $settings);
+                        $filter_count++;
+                        
+                        // Show info section after first filter (category)
+                        if ($filter_count === 1):
+                            $show_info = isset($instance['show_info']) ? $instance['show_info'] : true;
+                            
+                            // Get product count for dynamic message
+                            global $wp_query;
+                            $product_count = $wp_query->found_posts ?? 0;
+                            
+                            // Enhanced default text with more details
+                            if (!isset($instance['info_text']) || empty($instance['info_text'])) {
+                                $info_text = sprintf(
+                                    __('Showing %s products. Select multiple options to narrow down your search.', 'ajax-product-filter'),
+                                    number_format_i18n($product_count)
+                                );
+                            } else {
+                                $info_text = $instance['info_text'];
+                            }
+                            
+                            if ($show_info):
+                            ?>
+                            <div class="apf-filter-info">
+                                <p><?php echo esc_html($info_text); ?></p>
+                            </div>
+                            <?php 
+                            endif;
+                        endif;
+                    endif;
+                endforeach; ?>
                 
                 <!-- Auto Price Filter - Always show -->
                 <?php $this->render_auto_price_filter(); ?>

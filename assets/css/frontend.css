@@ -150,45 +150,21 @@
 
 /* ===== FILTER INFO SECTION ===== */
 .apf-filter-info {
-    margin: 0;
-    padding: 16px 20px;
-    background: var(--apf-hover);
+    margin: 16px 0;
+    padding: 12px 20px;
+    background: transparent;
     border-radius: 0;
-    font-size: 11px;
-    line-height: 1.7;
-    color: var(--apf-text-secondary);
+    font-size: 14px;
+    line-height: 1.5;
+    color: #666;
+    border: none;
+    border-top: 1px solid var(--apf-border);
     border-bottom: 1px solid var(--apf-border);
 }
 
 .apf-filter-info p {
-    margin: 0 0 10px;
-    font-weight: 400;
-}
-
-.apf-filter-info p:last-child {
     margin: 0;
-}
-
-.apf-quiz-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    color: var(--apf-primary);
-    text-decoration: underline;
-    font-weight: 500;
-    transition: var(--apf-transition-fast);
-    padding: 0;
-    font-size: 11px;
-    margin-top: 8px;
-    display: inline-block;
-}
-
-.apf-quiz-link:hover {
-    opacity: 0.8;
-}
-
-.apf-quiz-link svg {
-    display: none;
+    font-weight: 400;
 }
 
 /* ===== FILTER GROUPS ===== */
