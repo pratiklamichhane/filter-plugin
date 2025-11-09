@@ -102,17 +102,28 @@ class APF_Filter_Widget extends WP_Widget {
         ?>
         <div class="apf-filter-container apf-modern-design" id="apf-filter-container">
             
-            <!-- Filter Header with Shop By Title -->
+            <!-- Filter Header -->
             <div class="apf-filter-main-header">
-                <h3 class="apf-filter-main-title"><?php _e('Shop By', 'ajax-product-filter'); ?></h3>
+                <h3 class="apf-filter-main-title"><?php _e('Filters', 'ajax-product-filter'); ?></h3>
             </div>
             
             <?php 
-            // Show info section with default text if not set
+            // Show info section with enhanced default text
             $show_info = isset($instance['show_info']) ? $instance['show_info'] : true;
-            $info_text = isset($instance['info_text']) && !empty($instance['info_text']) 
-                ? $instance['info_text'] 
-                : __('Filter products by your preferences. Select multiple options to narrow down your search.', 'ajax-product-filter');
+            
+            // Get product count for dynamic message
+            global $wp_query;
+            $product_count = $wp_query->found_posts ?? 0;
+            
+            // Enhanced default text with more details
+            if (!isset($instance['info_text']) || empty($instance['info_text'])) {
+                $info_text = sprintf(
+                    __('Showing %s products. Use filters below to refine your search. Multiple selections work together to help you find exactly what you\'re looking for.', 'ajax-product-filter'),
+                    number_format_i18n($product_count)
+                );
+            } else {
+                $info_text = $instance['info_text'];
+            }
             
             if ($show_info):
             ?>
@@ -120,10 +131,7 @@ class APF_Filter_Widget extends WP_Widget {
                 <p><?php echo esc_html($info_text); ?></p>
                 <?php if ($instance['show_quiz_link'] ?? false): ?>
                 <a href="<?php echo esc_url($instance['quiz_url'] ?? '#'); ?>" class="apf-quiz-link">
-                    <?php echo esc_html($instance['quiz_text'] ?? __('Take a style quiz', 'ajax-product-filter')); ?>
-                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                        <path d="M4 2L8 6L4 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                    </svg>
+                    <?php echo esc_html($instance['quiz_text'] ?? __('Need help? Take our style quiz', 'ajax-product-filter')); ?>
                 </a>
                 <?php endif; ?>
             </div>

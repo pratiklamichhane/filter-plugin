@@ -131,14 +131,14 @@
     padding: 24px 20px;
     border-bottom: 2px solid var(--apf-primary);
     margin-bottom: 0;
-    background: var(--apf-primary);
+    background: var(--apf-background);
 }
 
 .apf-filter-main-title {
     font-size: 14px;
     font-weight: 700;
     margin: 0;
-    color: var(--apf-background);
+    color: var(--apf-primary);
     text-transform: uppercase;
     letter-spacing: 2px;
 }
@@ -151,17 +151,17 @@
 /* ===== FILTER INFO SECTION ===== */
 .apf-filter-info {
     margin: 0;
-    padding: 20px;
+    padding: 16px 20px;
     background: var(--apf-hover);
     border-radius: 0;
-    font-size: 13px;
-    line-height: 1.6;
+    font-size: 11px;
+    line-height: 1.7;
     color: var(--apf-text-secondary);
     border-bottom: 1px solid var(--apf-border);
 }
 
 .apf-filter-info p {
-    margin: 0 0 12px;
+    margin: 0 0 10px;
     font-weight: 400;
 }
 
@@ -172,16 +172,19 @@
 .apf-quiz-link {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    gap: 4px;
     color: var(--apf-primary);
     text-decoration: underline;
     font-weight: 500;
     transition: var(--apf-transition-fast);
     padding: 0;
+    font-size: 11px;
+    margin-top: 8px;
+    display: inline-block;
 }
 
 .apf-quiz-link:hover {
-    text-decoration: none;
+    opacity: 0.8;
 }
 
 .apf-quiz-link svg {
