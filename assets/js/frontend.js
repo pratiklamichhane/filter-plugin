@@ -16,6 +16,7 @@
             
             this.bindEvents();
             this.initAccordions();
+            this.updateFilterCounts(); // Initialize counts on page load
         },
         
         bindEvents: function() {
@@ -30,6 +31,11 @@
                 
                 $this.toggleClass('active');
                 $content.slideToggle(300);
+            });
+            
+            // Update filter count badges on change
+            $(document).on('change', '.apf-filter-content input[type="checkbox"], .apf-filter-content input[type="radio"]', function() {
+                self.updateFilterCounts();
             });
             
             // Hide filters button
@@ -399,6 +405,28 @@
             }
             
             window.history.pushState({}, '', url);
+        },
+        
+        updateFilterCounts: function() {
+            // Update count badges for each filter group
+            $('.apf-filter-group').each(function() {
+                const $group = $(this);
+                const $content = $group.find('.apf-filter-content');
+                const $countBadge = $group.find('.apf-filter-selected-count');
+                
+                // Count checked inputs in this group
+                const checkedCount = $content.find('input:checked').length;
+                
+                if (checkedCount > 0) {
+                    $countBadge.text(checkedCount).attr('data-count', checkedCount).show();
+                } else {
+                    $countBadge.hide();
+                }
+            });
+            
+            // Update main filter count in header
+            const totalFilters = $('.apf-filter-content input:checked').length;
+            $('.apf-filter-count').text(totalFilters);
         }
     };
     

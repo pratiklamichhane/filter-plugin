@@ -102,48 +102,61 @@ class APF_Filter_Widget extends WP_Widget {
         ?>
         <div class="apf-filter-container apf-modern-design" id="apf-filter-container">
             
-            <!-- Filter Header -->
-            <div class="apf-filter-main-header">
-                <h3 class="apf-filter-main-title"><?php _e('Filters', 'ajax-product-filter'); ?></h3>
+            <!-- Filter Header with Product Info -->
+            <div class="apf-filter-header-section">
+                <?php 
+                // Get product count
+                global $wp_query;
+                $product_count = $wp_query->found_posts ?? 0;
+                
+                // Get current category/taxonomy name if available
+                $category_name = '';
+                if (is_product_category()) {
+                    $category_name = single_term_title('', false);
+                } elseif (is_product_taxonomy()) {
+                    $category_name = single_term_title('', false);
+                }
+                ?>
+                
+                <?php if (!empty($category_name)): ?>
+                    <!-- Category Title -->
+                    <h1 class="apf-category-title"><?php echo esc_html($category_name); ?></h1>
+                <?php endif; ?>
+                
+                <!-- Product Count Info -->
+                <div class="apf-product-count-info">
+                    <?php 
+                    printf(
+                        esc_html__('Starting at $95, including UV-blocking lenses with scratch-resistant coatings. After choosing your frames, select prescription or non-prescription lenses.', 'ajax-product-filter')
+                    );
+                    ?>
+                </div>
+                
+                <!-- Read More Link -->
+                <a href="#" class="apf-read-more"><?php _e('Read more', 'ajax-product-filter'); ?></a>
+                
+                <!-- Style Quiz Link -->
+                <a href="#" class="apf-style-quiz">
+                    <?php _e('Take a style quiz', 'ajax-product-filter'); ?>
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                </a>
+                
+                <!-- Shop By Header -->
+                <div class="apf-shop-by-header">
+                    <h3 class="apf-shop-by-title"><?php _e('Shop By', 'ajax-product-filter'); ?></h3>
+                    <span class="apf-filter-count"><?php echo esc_html($product_count); ?></span>
+                </div>
             </div>
             
             <!-- Dynamic Filter Groups from Database -->
             <div class="apf-filter-groups">
-                <?php 
-                $filter_count = 0;
-                foreach ($filters as $filter): 
-                    if ($filter['enabled']): 
-                        $this->render_filter_group($filter, $settings);
-                        $filter_count++;
-                        
-                        // Show info section after first filter (category)
-                        if ($filter_count === 1):
-                            $show_info = isset($instance['show_info']) ? $instance['show_info'] : true;
-                            
-                            // Get product count for dynamic message
-                            global $wp_query;
-                            $product_count = $wp_query->found_posts ?? 0;
-                            
-                            // Enhanced default text with more details
-                            if (!isset($instance['info_text']) || empty($instance['info_text'])) {
-                                $info_text = sprintf(
-                                    __('Showing %s products. Select multiple options to narrow down your search.', 'ajax-product-filter'),
-                                    number_format_i18n($product_count)
-                                );
-                            } else {
-                                $info_text = $instance['info_text'];
-                            }
-                            
-                            if ($show_info):
-                            ?>
-                            <div class="apf-filter-info">
-                                <p><?php echo esc_html($info_text); ?></p>
-                            </div>
-                            <?php 
-                            endif;
-                        endif;
-                    endif;
-                endforeach; ?>
+                <?php foreach ($filters as $filter): ?>
+                    <?php if ($filter['enabled']): ?>
+                        <?php $this->render_filter_group($filter, $settings); ?>
+                    <?php endif; ?>
+                <?php endforeach; ?>
                 
                 <!-- Auto Price Filter - Always show -->
                 <?php $this->render_auto_price_filter(); ?>
@@ -160,10 +173,14 @@ class APF_Filter_Widget extends WP_Widget {
     
     private function render_filter_group($filter, $settings) {
         $expanded = isset($filter['expanded']) && $filter['expanded'];
+        
+        // Calculate selected count for this filter (will be updated via JS)
+        $selected_count = 0;
         ?>
         <div class="apf-filter-group">
             <button class="apf-filter-title <?php echo $expanded ? 'active' : ''; ?>" data-target="<?php echo esc_attr($filter['id']); ?>">
-                <?php echo esc_html($filter['title']); ?>
+                <span class="apf-filter-title-text"><?php echo esc_html($filter['title']); ?></span>
+                <span class="apf-filter-selected-count" style="display:none;" data-count="0"></span>
                 <svg class="apf-chevron" width="16" height="16" viewBox="0 0 16 16">
                     <path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="2" fill="none"/>
                 </svg>
