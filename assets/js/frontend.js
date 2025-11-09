@@ -43,31 +43,15 @@
                 self.applyFilters();
             });
             
-            // Color swatches - Fixed to trigger Ajax
-            $(document).on('click', '.apf-color-swatch', function(e) {
-                e.preventDefault();
-                const $swatch = $(this);
-                const $input = $swatch.find('input.apf-swatch-input');
+            // Color and Image swatches - Let the label work naturally, then trigger Ajax
+            $(document).on('change', 'input.apf-swatch-input', function() {
+                const $input = $(this);
+                const $swatch = $input.closest('.apf-color-swatch, .apf-image-swatch');
                 
-                // Toggle checkbox state
-                const isChecked = $input.prop('checked');
-                $input.prop('checked', !isChecked);
-                $swatch.toggleClass('selected', !isChecked);
+                // Update visual state
+                $swatch.toggleClass('selected', $input.prop('checked'));
                 
-                // Trigger Ajax filtering
-                self.applyFilters();
-            });
-            
-            // Image/Shape swatches
-            $(document).on('click', '.apf-image-swatch', function(e) {
-                e.preventDefault();
-                const $swatch = $(this);
-                const $input = $swatch.find('input.apf-swatch-input');
-                
-                // Toggle checkbox state
-                const isChecked = $input.prop('checked');
-                $input.prop('checked', !isChecked);
-                $swatch.toggleClass('selected', !isChecked);
+                console.log('Swatch changed:', $input.attr('name'), 'value:', $input.val(), 'checked:', $input.prop('checked'));
                 
                 // Trigger Ajax filtering
                 self.applyFilters();
@@ -147,21 +131,31 @@
         collectFilters: function() {
             const filters = {};
             
+            console.log('Collecting filters...');
+            
             // Quick filter
             const quickFilter = $('input[name="apf_quick_filter"]:checked').val();
             if (quickFilter) {
                 filters.quick_filter = quickFilter;
+                console.log('Quick filter:', quickFilter);
             }
             
-            // Taxonomies
+            // Taxonomies - including color swatches
             const taxonomies = ['pa_shape', 'pa_color', 'pa_gender', 'pa_frame_width', 'pa_material'];
             taxonomies.forEach(function(taxonomy) {
                 const values = [];
-                $('input[name="apf_' + taxonomy + '[]"]:checked').each(function() {
-                    values.push($(this).val());
+                
+                // Check both regular inputs and swatch inputs
+                $('input[name="apf_' + taxonomy + '[]"]:checked, input.apf-swatch-input[name="apf_' + taxonomy + '[]"]:checked').each(function() {
+                    const val = $(this).val();
+                    if (val && values.indexOf(val) === -1) {
+                        values.push(val);
+                    }
                 });
+                
                 if (values.length > 0) {
                     filters[taxonomy] = values;
+                    console.log('Taxonomy ' + taxonomy + ':', values);
                 }
             });
             
@@ -169,14 +163,41 @@
             const priceRange = $('input[name="apf_price_range"]:checked').val();
             if (priceRange) {
                 filters.price_range = priceRange;
+                console.log('Price range:', priceRange);
+            }
+            
+            // Rating
+            const rating = $('input[name="apf_rating"]:checked').val();
+            if (rating) {
+                filters.rating = rating;
+                console.log('Rating:', rating);
+            }
+            
+            // Stock status
+            const stockStatus = [];
+            $('input[name="apf_stock_status"]:checked').each(function() {
+                stockStatus.push($(this).val());
+            });
+            if (stockStatus.length > 0) {
+                filters.stock_status = stockStatus;
+                console.log('Stock status:', stockStatus);
+            }
+            
+            // On sale
+            const onSale = $('input[name="apf_on_sale"]:checked').val();
+            if (onSale) {
+                filters.on_sale = onSale;
+                console.log('On sale:', onSale);
             }
             
             // Orderby
             const orderby = $('.orderby').val();
             if (orderby) {
                 filters.orderby = orderby;
+                console.log('Order by:', orderby);
             }
             
+            console.log('All collected filters:', filters);
             return filters;
         },
         

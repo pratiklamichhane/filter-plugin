@@ -105,16 +105,19 @@ class APF_Filter_Widget extends WP_Widget {
             <!-- Filter Header with Shop By Title -->
             <div class="apf-filter-main-header">
                 <h3 class="apf-filter-main-title"><?php _e('Shop By', 'ajax-product-filter'); ?></h3>
-                <button class="apf-close-filters" id="apf-hide-filters" aria-label="<?php esc_attr_e('Close filters', 'ajax-product-filter'); ?>">
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                        <path d="M12 4L4 12M4 4L12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                    </svg>
-                </button>
             </div>
             
-            <?php if ($instance['show_info'] ?? true): ?>
+            <?php 
+            // Show info section with default text if not set
+            $show_info = isset($instance['show_info']) ? $instance['show_info'] : true;
+            $info_text = isset($instance['info_text']) && !empty($instance['info_text']) 
+                ? $instance['info_text'] 
+                : __('Filter products by your preferences. Select multiple options to narrow down your search.', 'ajax-product-filter');
+            
+            if ($show_info):
+            ?>
             <div class="apf-filter-info">
-                <p><?php echo esc_html($instance['info_text'] ?? ''); ?></p>
+                <p><?php echo esc_html($info_text); ?></p>
                 <?php if ($instance['show_quiz_link'] ?? false): ?>
                 <a href="<?php echo esc_url($instance['quiz_url'] ?? '#'); ?>" class="apf-quiz-link">
                     <?php echo esc_html($instance['quiz_text'] ?? __('Take a style quiz', 'ajax-product-filter')); ?>
@@ -126,11 +129,6 @@ class APF_Filter_Widget extends WP_Widget {
             </div>
             <?php endif; ?>
             
-            <!-- Active Filters -->
-            <div class="apf-active-filters" id="apf-active-filters" style="display: none;">
-                <div class="apf-active-filters-inner"></div>
-            </div>
-            
             <!-- Dynamic Filter Groups from Database -->
             <div class="apf-filter-groups">
                 <?php foreach ($filters as $filter): ?>
@@ -138,6 +136,9 @@ class APF_Filter_Widget extends WP_Widget {
                         <?php $this->render_filter_group($filter, $settings); ?>
                     <?php endif; ?>
                 <?php endforeach; ?>
+                
+                <!-- Auto Price Filter - Always show -->
+                <?php $this->render_auto_price_filter(); ?>
             </div>
             
             <!-- Loading Overlay -->
@@ -290,6 +291,66 @@ class APF_Filter_Widget extends WP_Widget {
             </label>
             <?php
         }
+    }
+    
+    private function render_auto_price_filter() {
+        // Get min and max prices from store
+        global $wpdb;
+        
+        $min_max = $wpdb->get_row("
+            SELECT MIN(CAST(meta_value AS DECIMAL(10,2))) as min_price, 
+                   MAX(CAST(meta_value AS DECIMAL(10,2))) as max_price
+            FROM {$wpdb->postmeta}
+            WHERE meta_key = '_price'
+            AND meta_value != ''
+            AND meta_value REGEXP '^[0-9]+\.?[0-9]*$'
+        ");
+        
+        if (!$min_max || !$min_max->min_price || !$min_max->max_price) {
+            return;
+        }
+        
+        $min_price = floor($min_max->min_price);
+        $max_price = ceil($min_max->max_price);
+        
+        // Calculate price ranges dynamically
+        $range_size = ceil(($max_price - $min_price) / 5); // 5 ranges
+        if ($range_size < 10) $range_size = 10; // Minimum range of 10
+        
+        $ranges = array();
+        $current = $min_price;
+        
+        while ($current < $max_price) {
+            $range_max = min($current + $range_size, $max_price);
+            $ranges[] = array(
+                'min' => $current,
+                'max' => $range_max,
+                'label' => wc_price($current) . ' - ' . wc_price($range_max)
+            );
+            $current = $range_max;
+        }
+        
+        if (empty($ranges)) {
+            return;
+        }
+        ?>
+        <div class="apf-filter-group">
+            <button class="apf-filter-title" data-target="auto-price">
+                <?php _e('Price Range', 'ajax-product-filter'); ?>
+                <svg class="apf-chevron" width="16" height="16" viewBox="0 0 16 16">
+                    <path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="2" fill="none"/>
+                </svg>
+            </button>
+            <div class="apf-filter-content" id="filter-auto-price" style="display:none;">
+                <?php foreach ($ranges as $range): ?>
+                    <label class="apf-filter-option">
+                        <input type="radio" name="apf_price_range" value="<?php echo esc_attr($range['min'] . '-' . $range['max']); ?>">
+                        <span><?php echo $range['label']; ?></span>
+                    </label>
+                <?php endforeach; ?>
+            </div>
+        </div>
+        <?php
     }
     
     private function render_quick_filter($filter) {
