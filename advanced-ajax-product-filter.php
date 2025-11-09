@@ -2,8 +2,8 @@
 /**
  * Plugin Name: Advanced Ajax Product Filter
  * Plugin URI: pratiklamichhane.com.np
- * Description: Complete Ajax product filter with fully configurable attributes for WooCommerce
- * Version: 1.0.0
+ * Description: Premium Ajax product filter with interactive price slider, color/image swatches, and professional design for WooCommerce
+ * Version: 2.0.0
  * Author: Pratik Lamichhane
  * Author URI: pratiklamichhane.com.np
  * License: GPL v2 or later
@@ -11,7 +11,7 @@
  * Requires at least: 5.8
  * Requires PHP: 7.4
  * WC requires at least: 5.0
- * WC tested up to: 8.0
+ * WC tested up to: 9.0
  */
 
 if (!defined('ABSPATH')) {
@@ -19,7 +19,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Define plugin constants
-define('APF_VERSION', '1.0.0');
+define('APF_VERSION', '2.0.0');
 define('APF_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('APF_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('APF_PLUGIN_BASENAME', plugin_basename(__FILE__));

@@ -313,26 +313,7 @@ class APF_Filter_Widget extends WP_Widget {
         $min_price = floor($min_max->min_price);
         $max_price = ceil($min_max->max_price);
         
-        // Calculate price ranges dynamically
-        $range_size = ceil(($max_price - $min_price) / 5); // 5 ranges
-        if ($range_size < 10) $range_size = 10; // Minimum range of 10
-        
-        $ranges = array();
-        $current = $min_price;
-        
-        while ($current < $max_price) {
-            $range_max = min($current + $range_size, $max_price);
-            $ranges[] = array(
-                'min' => $current,
-                'max' => $range_max,
-                'label' => wc_price($current) . ' - ' . wc_price($range_max)
-            );
-            $current = $range_max;
-        }
-        
-        if (empty($ranges)) {
-            return;
-        }
+        $currency_symbol = get_woocommerce_currency_symbol();
         ?>
         <div class="apf-filter-group">
             <button class="apf-filter-title" data-target="auto-price">
@@ -341,13 +322,62 @@ class APF_Filter_Widget extends WP_Widget {
                     <path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="2" fill="none"/>
                 </svg>
             </button>
-            <div class="apf-filter-content" id="filter-auto-price" style="display:none;">
-                <?php foreach ($ranges as $range): ?>
-                    <label class="apf-filter-option">
-                        <input type="radio" name="apf_price_range" value="<?php echo esc_attr($range['min'] . '-' . $range['max']); ?>">
-                        <span><?php echo $range['label']; ?></span>
-                    </label>
-                <?php endforeach; ?>
+            <div class="apf-filter-content apf-price-slider-content" id="filter-auto-price" style="display:none;">
+                <div class="apf-price-slider-wrapper">
+                    <div class="apf-price-values">
+                        <div class="apf-price-input-group">
+                            <label class="apf-price-label"><?php _e('Min', 'ajax-product-filter'); ?></label>
+                            <div class="apf-price-input-wrapper">
+                                <span class="apf-currency-symbol"><?php echo esc_html($currency_symbol); ?></span>
+                                <input type="number" 
+                                       class="apf-price-input apf-price-min" 
+                                       id="apf-price-min" 
+                                       value="<?php echo esc_attr($min_price); ?>" 
+                                       min="<?php echo esc_attr($min_price); ?>" 
+                                       max="<?php echo esc_attr($max_price); ?>"
+                                       step="1">
+                            </div>
+                        </div>
+                        <span class="apf-price-separator">—</span>
+                        <div class="apf-price-input-group">
+                            <label class="apf-price-label"><?php _e('Max', 'ajax-product-filter'); ?></label>
+                            <div class="apf-price-input-wrapper">
+                                <span class="apf-currency-symbol"><?php echo esc_html($currency_symbol); ?></span>
+                                <input type="number" 
+                                       class="apf-price-input apf-price-max" 
+                                       id="apf-price-max" 
+                                       value="<?php echo esc_attr($max_price); ?>" 
+                                       min="<?php echo esc_attr($min_price); ?>" 
+                                       max="<?php echo esc_attr($max_price); ?>"
+                                       step="1">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="apf-price-slider-track">
+                        <div class="apf-price-slider-range" id="apf-price-slider-range"></div>
+                        <input type="range" 
+                               class="apf-price-range-min" 
+                               id="apf-range-min"
+                               min="<?php echo esc_attr($min_price); ?>" 
+                               max="<?php echo esc_attr($max_price); ?>" 
+                               value="<?php echo esc_attr($min_price); ?>" 
+                               step="1">
+                        <input type="range" 
+                               class="apf-price-range-max" 
+                               id="apf-range-max"
+                               min="<?php echo esc_attr($min_price); ?>" 
+                               max="<?php echo esc_attr($max_price); ?>" 
+                               value="<?php echo esc_attr($max_price); ?>" 
+                               step="1">
+                    </div>
+                    
+                    <input type="hidden" name="apf_price_range" id="apf-price-range-hidden">
+                    
+                    <button type="button" class="apf-price-apply-btn" id="apf-apply-price">
+                        <?php _e('Apply', 'ajax-product-filter'); ?>
+                    </button>
+                </div>
             </div>
         </div>
         <?php

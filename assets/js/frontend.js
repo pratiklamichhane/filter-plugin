@@ -62,6 +62,9 @@
                 self.applyFilters();
             });
             
+            // Price slider
+            self.initPriceSlider();
+            
             // Remove active filter
             $(document).on('click', '.apf-remove-filter', function(e) {
                 e.preventDefault();
@@ -81,6 +84,92 @@
             $(document).on('submit', '.apf-filter-container form', function(e) {
                 e.preventDefault();
             });
+        },
+        
+        initPriceSlider: function() {
+            const self = this;
+            const $minRange = $('#apf-range-min');
+            const $maxRange = $('#apf-range-max');
+            const $minInput = $('#apf-price-min');
+            const $maxInput = $('#apf-price-max');
+            const $sliderRange = $('#apf-price-slider-range');
+            const $applyBtn = $('#apf-apply-price');
+            
+            if (!$minRange.length || !$maxRange.length) {
+                return;
+            }
+            
+            const minPrice = parseInt($minRange.attr('min'));
+            const maxPrice = parseInt($maxRange.attr('max'));
+            
+            function updateSliderRange() {
+                const minVal = parseInt($minRange.val());
+                const maxVal = parseInt($maxRange.val());
+                const percentMin = ((minVal - minPrice) / (maxPrice - minPrice)) * 100;
+                const percentMax = ((maxVal - minPrice) / (maxPrice - minPrice)) * 100;
+                
+                $sliderRange.css({
+                    'left': percentMin + '%',
+                    'width': (percentMax - percentMin) + '%'
+                });
+            }
+            
+            // Range slider changes
+            $minRange.on('input', function() {
+                let minVal = parseInt($(this).val());
+                let maxVal = parseInt($maxRange.val());
+                
+                if (minVal >= maxVal) {
+                    minVal = maxVal - 1;
+                    $(this).val(minVal);
+                }
+                
+                $minInput.val(minVal);
+                updateSliderRange();
+            });
+            
+            $maxRange.on('input', function() {
+                let maxVal = parseInt($(this).val());
+                let minVal = parseInt($minRange.val());
+                
+                if (maxVal <= minVal) {
+                    maxVal = minVal + 1;
+                    $(this).val(maxVal);
+                }
+                
+                $maxInput.val(maxVal);
+                updateSliderRange();
+            });
+            
+            // Number input changes
+            $minInput.on('change', function() {
+                let val = parseInt($(this).val()) || minPrice;
+                if (val < minPrice) val = minPrice;
+                if (val >= parseInt($maxInput.val())) val = parseInt($maxInput.val()) - 1;
+                $(this).val(val);
+                $minRange.val(val);
+                updateSliderRange();
+            });
+            
+            $maxInput.on('change', function() {
+                let val = parseInt($(this).val()) || maxPrice;
+                if (val > maxPrice) val = maxPrice;
+                if (val <= parseInt($minInput.val())) val = parseInt($minInput.val()) + 1;
+                $(this).val(val);
+                $maxRange.val(val);
+                updateSliderRange();
+            });
+            
+            // Apply button
+            $applyBtn.on('click', function() {
+                const minVal = parseInt($minInput.val());
+                const maxVal = parseInt($maxInput.val());
+                $('#apf-price-range-hidden').val(minVal + '-' + maxVal);
+                self.applyFilters();
+            });
+            
+            // Initialize
+            updateSliderRange();
         },
         
         initAccordions: function() {
